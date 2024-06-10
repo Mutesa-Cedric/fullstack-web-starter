@@ -1,11 +1,11 @@
 import jwt = require("jsonwebtoken");
 
-export const generateToken = (payload: any) => {
-    return jwt.sign(payload, process.env.SECRET as string);
+export const generateToken = (userId: string): string => {
+    return jwt.sign(userId, process.env.JWT_SECRET as string);
 };
 
 export const verifyToken = (token: string) => {
-    return jwt.verify(token, process.env.SECRET as string);
+    return jwt.verify(token, process.env.JWT_SECRET as string);
 }
 
 

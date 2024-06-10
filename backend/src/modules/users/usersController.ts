@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { Request, Response } from "express";
 import { hashPassword, comparePassword } from "../../utils/bcrypt";
 import { validateUser } from './userValidator';
+import { generateToken } from '../../utils/jwt';
 
 const prisma = new PrismaClient();
 
@@ -27,9 +28,20 @@ export default class UserController {
                     password: await hashPassword(user.password),
                 },
             });
+
+            // set cookie
+            const token = generateToken(newUser.id);
+
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "none",
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+            });
             res.status(201).json({
                 success: true,
-                newUser
+                newUser,
+                token
             })
         } catch (error) {
             console.log(error);
@@ -59,9 +71,19 @@ export default class UserController {
                     message: "Invalid email or password",
                 });
             }
+
+            const token = generateToken(user.id);
+
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "none",
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+            });
             res.status(200).json({
                 success: true,
-                user
+                user,
+                token
             })
         } catch (error) {
             console.log(error);

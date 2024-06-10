@@ -8,9 +8,23 @@ export default class ProductsController {
     public static async createProduct(req: Request, res: Response) {
         try {
             const product = validateProduct(req.body);
+            const createdBy = await prismaClient.user.findUnique({
+                where: {
+                    // @ts-ignore
+                    id: req.user
+                }
+            })
+            if (!createdBy) {
+                return res.status(404).json({
+                    message: "User not found"
+                })
+            }
 
             const newProduct = await prismaClient.product.create({
-                data: product
+                data: {
+                    ...product,
+                    createdBy: { connect: { id: createdBy.id } }
+                }
             });
 
             res.status(201).json({
@@ -28,7 +42,25 @@ export default class ProductsController {
 
     public static async getProducts(req: Request, res: Response) {
         try {
-            const products = await prismaClient.product.findMany();
+            const createdBy = await prismaClient.user.findUnique({
+                where: {
+                    // @ts-ignore
+                    id: req.user
+                }
+            })
+            if (!createdBy) {
+                return res.status(404).json({
+                    message: "User not found"
+                })
+            }
+
+            const products = await prismaClient.product.findMany({
+                where: {
+                    createdBy: {
+                        id: createdBy.id
+                    }
+                }
+            });
             res.status(200).json({
                 success: true,
                 products
@@ -46,9 +78,25 @@ export default class ProductsController {
             const productId = req.params.id;
             const product = validateProduct(req.body);
 
-            const updatedProduct = await prismaClient.product.update({
+            const existingProduct = await prismaClient.product.findUnique({
                 where: {
                     id: productId
+                }
+            });
+            if (!existingProduct) {
+                return res.status(404).json({
+                    message: "Product not found"
+                })
+            }
+            // @ts-ignore
+            if (existingProduct.userId !== req.user) {
+                return res.status(403).json({
+                    message: "Forbidden"
+                })
+            }
+            const updatedProduct = await prismaClient.product.update({
+                where: {
+                    id: productId,
                 },
                 data: product
             });
@@ -69,9 +117,21 @@ export default class ProductsController {
         try {
             const productId = req.params.id;
 
+            const createdBy = await prismaClient.user.findUnique({
+                where: {
+                    // @ts-ignore
+                    id: req.user
+                }
+            })
+            if (!createdBy) {
+                return res.status(404).json({
+                    message: "User not found"
+                })
+            }
             const product = await prismaClient.product.delete({
                 where: {
-                    id: productId
+                    id: productId,
+                    userId: createdBy.id
                 }
             });
             if (!product) {

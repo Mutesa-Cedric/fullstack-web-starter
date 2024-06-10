@@ -4,6 +4,8 @@ import cors = require("cors");
 import bodyParser = require("body-parser");
 import cookieParser = require("cookie-parser");
 import userRouter from "./modules/users/usersRouter";
+import isAuthenticated from "./middlewares/auth";
+import productsRouter from "./modules/products/productsRouter";
 
 const PORT = process.env.PORT || 8000;
 
@@ -27,6 +29,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/users", userRouter);
+app.use("/products", isAuthenticated, productsRouter);
 app.use((req, res, next) => {
     console.log(req.originalUrl, "\t", req.method, "\t", req.url);
     next();
