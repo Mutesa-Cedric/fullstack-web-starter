@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,4 +14,38 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id        String         @id @default(cuid())
+  userId    String
+  products  OrderProduct[]
+  quantity  Int
+  total     Float
+  status    OrderStatus    @default(PENDING)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+model OrderProduct {
+  id        String  @id @default(cuid())
+  productId String
+  quanity   Int
+  Order     Order?  @relation(fields: [orderId], references: [id])
+  orderId   String?
 }

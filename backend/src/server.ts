@@ -3,7 +3,7 @@ import express = require("express");
 import cors = require("cors");
 import bodyParser = require("body-parser");
 import cookieParser = require("cookie-parser");
-import userRouter from "./modules/users/userRouter";
+import userRouter from "./modules/users/usersRouter";
 
 const PORT = process.env.PORT || 8000;
 
