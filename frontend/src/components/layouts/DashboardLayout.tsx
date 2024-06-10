@@ -16,7 +16,7 @@ import {
     XMarkIcon
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import Logo from '../Logo'
 
 const navigation = [
@@ -33,7 +33,7 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     return (
@@ -227,9 +227,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </div>
                     </div>
 
-                    <main className="py-10">
+                    <main className="py-6">
                         <div className="px-4 sm:px-6 lg:px-8">
-                            {children}
+                            <Outlet />
                         </div>
                     </main>
                 </div>
