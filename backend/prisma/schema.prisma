@@ -19,21 +19,21 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  name        String
-  description String
-  price       Float
-  createdBy   User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId      String
+  id           String         @id @default(cuid())
+  name         String
+  description  String
+  price        Float
+  createdBy    User           @relation(fields: [userId], references: [id])
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  userId       String
+  OrderProduct OrderProduct[]
 }
 
 model Order {
   id        String         @id @default(cuid())
   createdBy User           @relation(fields: [userId], references: [id])
   products  OrderProduct[]
-  quantity  Int
   total     Float
   status    OrderStatus    @default(PENDING)
   createdAt DateTime       @default(now())
@@ -49,8 +49,9 @@ enum OrderStatus {
 
 model OrderProduct {
   id        String  @id @default(cuid())
-  productId String
-  quanity   Int
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
   Order     Order?  @relation(fields: [orderId], references: [id])
   orderId   String?
+  productId String
 }
