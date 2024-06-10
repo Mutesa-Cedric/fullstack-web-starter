@@ -6,18 +6,18 @@ import AuthInput from "../components/AuthInput";
 import AuthLayout from "../components/layouts/AuthLayout";
 import Logo from "../components/Logo";
 
-export default function Login() {
-    const [loggingIn, setLoggingIn] = useState(false);
+export default function Register() {
+    const [registering, setRegistering] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoggingIn(true);
+        setRegistering(true);
         setTimeout(() => {
-            setLoggingIn(false);
+            setRegistering(false);
             notifications.show({
-                title: 'Login successful',
-                message: 'You have successfully logged in',
+                title: 'Account creation successful',
+                message: 'You have successfully created your account',
                 color: 'teal',
             })
             navigate("/dashboard")
@@ -35,9 +35,9 @@ export default function Login() {
                         Sign in to your account
                     </h2>
                     <p className="mt-2 text-sm leading-6 text-gray-500">
-                        Not a member?{' '}
-                        <Link to="/register" className="font-semibold text-blue-600 hover:text-blue-500">
-                            Create an account
+                        Already have an account{' '}
+                        <Link to="/login" className="font-semibold text-blue-600 hover:text-blue-500">
+                            Login
                         </Link>
                     </p>
                 </div>
@@ -47,6 +47,12 @@ export default function Login() {
                         <form
                             onSubmit={handleSubmit}
                             className="space-y-6">
+                            <AuthInput
+                                label="Full Name"
+                                required
+                                type="text"
+                            />
+
                             <AuthInput
                                 label="Email Address"
                                 required
@@ -60,14 +66,20 @@ export default function Login() {
                                 autoComplete="current-password"
                                 type="password"
                             />
+                            <AuthInput
+                                label="Repeat Password"
+                                required
+                                autoComplete="current-password"
+                                type="password"
+                            />
 
                             <div>
                                 <Button
                                     type="submit"
                                     className="w-full"
-                                    loading={loggingIn}
+                                    loading={registering}
                                 >
-                                    Sign in
+                                    Create account
                                 </Button>
                             </div>
                         </form>
