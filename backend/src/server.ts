@@ -3,19 +3,14 @@ import express = require("express");
 import cors = require("cors");
 import bodyParser = require("body-parser");
 import cookieParser = require("cookie-parser");
+import userRouter from "./modules/users/userRouter";
 
-import { dbConnection } from "./utils/dbConnection";
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 app.use(cors());
-dbConnection().then(() => {
-    console.log("Database connected");
-    app.listen(PORT, () => {
-        console.log(`Server is listening on port ${PORT}`);
-    });
-}).catch((err) => {
-    console.log(err);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
 app.use(bodyParser.json())
@@ -31,6 +26,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use("/users", userRouter);
 app.use((req, res, next) => {
     console.log(req.originalUrl, "\t", req.method, "\t", req.url);
     next();
