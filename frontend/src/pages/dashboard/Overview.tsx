@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-// @ts-expect-error(no type definitions found )
 import { Helmet } from "react-helmet";
 export default function Overview() {
     return (
