@@ -1,13 +1,8 @@
 
 export function generatePageTitle(title: string) {
-    return title.concat(" | Stockport")
+    return title.concat(" | Restful NE")
 }
 
-/**
- * function that takes a key string like 'name' or 'name.first' and returns a function that takes an object and returns the value of the key in the object
- * @param key - the key to get the value of
- * @param obj - the object to get the value from
- */
 export const getObjValue = (key: string | number, obj: any) => {
     const keys = key.toString().split('.');
     let result = obj;

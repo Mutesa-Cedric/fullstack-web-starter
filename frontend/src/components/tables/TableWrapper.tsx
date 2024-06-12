@@ -180,20 +180,16 @@ const TableWrapper = ({
     };
 
     return (
-        <div className='p-4 md:p-8'>
+        <div className=''>
             {/* HEADER */}
             <div className="flex flex-col flex-wrap lg:flex-row lg:justify-between gap-2 items-center">
                 <div className="flex flex-row gap-2 items-center">
-                    <h1 className="font-bold text-2xl text-[#518DC8]">{title}</h1>
-                    {/* <IoRefreshCircleOutline
-                  className={`h-7 w-7 text-gray-600 cursor-pointer ${loading !== undefined && loading ? 'animate-spin' : ''}`}
-                  onClick={refresh}
-               /> */}
+                    <h1 className="text-2xl font-semibold">{title}</h1>
                 </div>
                 {/* SEARCH + OTHER FILTERS */}
                 <div className="flex flex-row flex-wrap items-center gap-2 h-fit">
                     {data.length !== 0 && (
-                        <div className="flex flex-row items-center rounded-md h-full max-h-[40px] bg-color-a4 px-4 lg:py-4 gap-2">
+                        <div className="flex flex-row items-center rounded-md h-full max-h-[40px] bg-color-a4 px-4 lg:py-4 gap-2 border">
                             <IoSearchOutline className="stroke-[#5D6E8B]" />
                             <input
                                 type="text"

@@ -13,7 +13,6 @@ export default function Overview() {
                 </div>
                 <div className="w-full grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     <StatsCard title="Products" value="200" link="/dashboard/products" />
-                    <StatsCard title="Orders" value="500" link="/dashboard/orders" />
                 </div>
             </div>
         </>

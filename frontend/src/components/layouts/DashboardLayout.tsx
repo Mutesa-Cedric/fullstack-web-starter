@@ -16,13 +16,12 @@ import {
     XMarkIcon
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import Logo from '../Logo'
 
 const navigation = [
-    { name: 'Overview', href: '/dashboard', icon: HomeIcon, current: true },
-    { name: 'Products', href: '/dashboard/products', icon: RectangleGroupIcon, current: false },
-    { name: 'Orders', href: '/dashboard/orders', icon: ShoppingCartIcon, current: false },
+    { name: 'Overview', href: '/dashboard', icon: HomeIcon },
+    { name: 'Products', href: '/dashboard/products', icon: RectangleGroupIcon },
 ]
 const userNavigation = [
     { name: 'Your profile', href: '/dashboard/profile' },
@@ -34,7 +33,8 @@ function classNames(...classes: string[]) {
 }
 
 export default function DashboardLayout() {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const location = useLocation();
 
     return (
         <>
@@ -88,10 +88,10 @@ export default function DashboardLayout() {
                                                     <ul role="list" className="-mx-2 space-y-1">
                                                         {navigation.map((item) => (
                                                             <li key={item.name}>
-                                                                <a
-                                                                    href={item.href}
+                                                                <Link
+                                                                    to={item.href}
                                                                     className={classNames(
-                                                                        item.current
+                                                                        location.pathname === item.href
                                                                             ? 'bg-gray-800 text-white'
                                                                             : 'text-gray-400 hover:bg-gray-800 hover:text-white',
                                                                         'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
@@ -99,7 +99,7 @@ export default function DashboardLayout() {
                                                                 >
                                                                     <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                                                     {item.name}
-                                                                </a>
+                                                                </Link>
                                                             </li>
                                                         ))}
                                                     </ul>
@@ -136,10 +136,10 @@ export default function DashboardLayout() {
                                     <ul role="list" className="-mx-2 space-y-1">
                                         {navigation.map((item) => (
                                             <li key={item.name}>
-                                                <a
-                                                    href={item.href}
+                                                <Link
+                                                    to={item.href}
                                                     className={classNames(
-                                                        item.current
+                                                        location.pathname === item.href
                                                             ? 'bg-gray-800 text-white'
                                                             : 'text-gray-400 hover:bg-gray-800 hover:text-white',
                                                         'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
@@ -147,7 +147,7 @@ export default function DashboardLayout() {
                                                 >
                                                     <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                                     {item.name}
-                                                </a>
+                                                </Link>
                                             </li>
                                         ))}
                                     </ul>

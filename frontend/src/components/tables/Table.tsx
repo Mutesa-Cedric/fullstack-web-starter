@@ -83,7 +83,7 @@ export function CustomTable({
             });
 
     return (
-        <div className="overflow-x-auto mt-2 rounded-t-md">
+        <div className="overflow-x-auto mt-2 rounded-t-md space-y-4">
             <Table miw={800} verticalSpacing="sm" striped={'even'}>
                 <Table.Thead>
                     <Table.Tr className=" text-[1rem] bg-gray-100 border ">
