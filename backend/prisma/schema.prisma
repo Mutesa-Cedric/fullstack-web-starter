@@ -15,43 +15,15 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Product   Product[]
-  Order     Order[]
 }
 
 model Product {
-  id           String         @id @default(cuid())
-  name         String
-  description  String
-  price        Float
-  createdBy    User           @relation(fields: [userId], references: [id])
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  userId       String
-  OrderProduct OrderProduct[]
-}
-
-model Order {
-  id        String         @id @default(cuid())
-  createdBy User           @relation(fields: [userId], references: [id])
-  products  OrderProduct[]
-  total     Float
-  status    OrderStatus    @default(PENDING)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  userId    String
-}
-
-enum OrderStatus {
-  PENDING
-  COMPLETED
-  CANCELLED
-}
-
-model OrderProduct {
-  id        String  @id @default(cuid())
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int
-  Order     Order?  @relation(fields: [orderId], references: [id])
-  orderId   String?
-  productId String
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  createdBy   User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
 }
