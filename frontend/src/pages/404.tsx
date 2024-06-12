@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet"
+import { generatePageTitle } from "../lib/utils";
 
 export default function NotFound() {
     return (
         <>
+            <Helmet>
+                <title>{generatePageTitle("Page Not Found")}</title>
+            </Helmet>
             <main className="grid min-h-screen place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
                 <div className="text-center">
                     <p className="text-base font-semibold text-blue-600">404</p>
