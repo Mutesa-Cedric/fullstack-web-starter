@@ -6,6 +6,9 @@ import { Column } from "../../components/tables/Table";
 import TableWrapper from "../../components/tables/TableWrapper";
 import { generatePageTitle } from "../../lib/utils";
 import { Product } from "../../types";
+import AddOrEditProductModal from "../../components/modals/AddOrEditProduct";
+import { useRecoilState } from "recoil";
+import { showAddOrEditProductState } from "../../store";
 
 
 const columns: Column<Product>[] = [
@@ -35,12 +38,21 @@ const columns: Column<Product>[] = [
     {
         title: "Actions",
         key: "actions",
-        Element: ({ row }) => (
-            <div className="flex space-x-2">
-                <Button size="xs" variant="outline">Edit</Button>
-                <Button size="xs" variant="outline" color="red">Delete</Button>
-            </div>
-        )
+        Element: ({ row }) => {
+            const [, setShowEdit] = useRecoilState(showAddOrEditProductState);
+            return (
+                <div className="flex space-x-2">
+                    <Button
+                        onClick={() => setShowEdit({
+                            show: true,
+                            action: "edit",
+                            product: row
+                        }) }
+                        size="xs" variant="outline">Edit</Button>
+                    <Button size="xs" variant="outline" color="red">Delete</Button>
+                </div>
+            )
+        }
     }
 ]
 
@@ -56,18 +68,25 @@ const products: Product[] = Array.from({ length: 35 }, () => ({
 }))
 
 export default function Products() {
+    const [, setShowAddProduct] = useRecoilState(showAddOrEditProductState);
     return (
         <>
             <Helmet>
                 <title>{generatePageTitle("Products")}</title>
             </Helmet>
+            <AddOrEditProductModal />
             <TableWrapper
                 columns={columns}
                 data={products}
                 title="Products"
                 description="List of all products"
                 actions={
-                    <Button>
+                    <Button
+                        onClick={() => setShowAddProduct({
+                            show: true,
+                            action: "add"
+                        })}
+                    >
                         <PlusIcon className="w-6" />
                         <span>Add Product</span>
                     </Button>
