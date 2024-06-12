@@ -8,7 +8,8 @@ import { generatePageTitle } from "../../lib/utils";
 import { Product } from "../../types";
 import AddOrEditProductModal from "../../components/modals/AddOrEditProduct";
 import { useRecoilState } from "recoil";
-import { showAddOrEditProductState } from "../../store";
+import { showAddOrEditProductState, showDeleteProductState } from "../../store";
+import DeleteProductModal from "../../components/modals/DeleteProduct";
 
 
 const columns: Column<Product>[] = [
@@ -40,6 +41,7 @@ const columns: Column<Product>[] = [
         key: "actions",
         Element: ({ row }) => {
             const [, setShowEdit] = useRecoilState(showAddOrEditProductState);
+            const [, setShowDelete] = useRecoilState(showDeleteProductState)
             return (
                 <div className="flex space-x-2">
                     <Button
@@ -47,9 +49,14 @@ const columns: Column<Product>[] = [
                             show: true,
                             action: "edit",
                             product: row
-                        }) }
+                        })}
                         size="xs" variant="outline">Edit</Button>
-                    <Button size="xs" variant="outline" color="red">Delete</Button>
+                    <Button
+                        onClick={() => setShowDelete({
+                            show: true,
+                            product: row
+                        })}
+                        size="xs" variant="outline" color="red">Delete</Button>
                 </div>
             )
         }
@@ -75,6 +82,7 @@ export default function Products() {
                 <title>{generatePageTitle("Products")}</title>
             </Helmet>
             <AddOrEditProductModal />
+            <DeleteProductModal />
             <TableWrapper
                 columns={columns}
                 data={products}

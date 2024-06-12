@@ -8,4 +8,12 @@ export const showAddOrEditProductState = atom<{
 } | null>({
     key: "ShowAddProduct",
     default: null
-})
+});
+
+export const showDeleteProductState = atom<{
+    show: boolean,
+    product?: Product
+} | null>({
+    key: "ShowDeleteProduct",
+    default: null
+});
