@@ -24,8 +24,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [loggingIn, setLoggingIn] = useState(false);
     const [registering, setRegistering] = useState(false);
     const [loggingOut, setLoggingOut] = useState(false);
-    const [resettingPassword, setResettingPassword] = useState(false);
-    const [updatingProfile, setUpdatingProfile] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
     const [user, setUser] = useState<User | null>(null);
 
@@ -112,6 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setLoggingOut(true);
         try {
             deleteCookie("token");
+            await axios.post("/users/logout");
             setUser(null);
             notifications.show({
                 title: "Success",

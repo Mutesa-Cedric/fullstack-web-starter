@@ -1,15 +1,15 @@
-import { faker } from "@faker-js/faker";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { Button } from "@mantine/core";
 import { Helmet } from "react-helmet";
+import { useRecoilState } from "recoil";
+import AddOrEditProductModal from "../../components/modals/AddOrEditProduct";
+import DeleteProductModal from "../../components/modals/DeleteProduct";
 import { Column } from "../../components/tables/Table";
 import TableWrapper from "../../components/tables/TableWrapper";
+import useProducts from "../../hooks/useProducts";
 import { generatePageTitle } from "../../lib/utils";
-import { Product } from "../../types";
-import AddOrEditProductModal from "../../components/modals/AddOrEditProduct";
-import { useRecoilState } from "recoil";
 import { showAddOrEditProductState, showDeleteProductState } from "../../store";
-import DeleteProductModal from "../../components/modals/DeleteProduct";
+import { Product } from "../../types";
 
 
 const columns: Column<Product>[] = [
@@ -63,19 +63,9 @@ const columns: Column<Product>[] = [
     }
 ]
 
-const products: Product[] = Array.from({ length: 35 }, () => ({
-    id: "#" + faker.string.uuid().slice(0, 3),
-    name: faker.commerce.productName(),
-    description: faker.commerce.productDescription(),
-    price: faker.number.int({
-        min: 10,
-        max: 100
-    }),
-    createdAt: faker.date.recent().toISOString()
-}))
-
 export default function Products() {
     const [, setShowAddProduct] = useRecoilState(showAddOrEditProductState);
+    const { isLoading, products, error } = useProducts();
     return (
         <>
             <Helmet>
@@ -85,7 +75,9 @@ export default function Products() {
             <DeleteProductModal />
             <TableWrapper
                 columns={columns}
-                data={products}
+                data={products ?? []}
+                loading={isLoading}
+                error={error}
                 title="Products"
                 description="List of all products"
                 actions={

@@ -3,9 +3,11 @@ import ModalLayout from '../layouts/ModalLayout'
 import { useRecoilState } from 'recoil'
 import { showAddOrEditProductState } from '../../store';
 import { Input, Button, Textarea } from '@mantine/core';
+import useProducts from '../../hooks/useProducts';
 
 export default function AddOrEditProductModal() {
     const [show, setShow] = useRecoilState(showAddOrEditProductState);
+    const { createProduct, creatingProduct, updateProduct, updatingProduct } = useProducts();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -13,10 +15,17 @@ export default function AddOrEditProductModal() {
         const data = {
             name: formData.get('name') as string,
             description: formData.get('description') as string,
-            price: formData.get('price') as string
+            price: parseInt(formData.get('price') as string)
         }
 
-        // TODO : implement the rest
+        if (show?.action === 'add') {
+            createProduct(data);
+        } else if (show?.action === 'edit' && show.product) {
+            updateProduct({
+                ...show.product,
+                ...data
+            });
+        }
     }
     return (
         <ModalLayout
@@ -55,8 +64,10 @@ export default function AddOrEditProductModal() {
                     </Button>
                     <Button
                         type='submit'
+                        loading={creatingProduct || updatingProduct}
+                        disabled={creatingProduct || updatingProduct}
                     >
-                        Add Product
+                        {show?.action === 'add' ? 'Add Product' : 'Update Product'}
                     </Button>
                 </div>
 

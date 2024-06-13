@@ -2,9 +2,12 @@ import { Button } from '@mantine/core';
 import { useRecoilState } from 'recoil';
 import { showDeleteProductState } from '../../store';
 import ModalLayout from '../layouts/ModalLayout';
+import useProducts from '../../hooks/useProducts';
 
 export default function DeleteProductModal() {
     const [show, setShow] = useRecoilState(showDeleteProductState);
+    const { deleteProduct, deletingProduct } = useProducts();
+
     return (
         <ModalLayout
             open={Boolean(show?.show)}
@@ -20,7 +23,11 @@ export default function DeleteProductModal() {
                 >
                     Cancel
                 </Button>
-                <Button color='red'>
+                <Button
+                    onClick={() => deleteProduct(show!.product!.id)}
+                    loading={deletingProduct}
+                    disabled={deletingProduct}
+                    color='red'>
                     Delete
                 </Button>
             </div>

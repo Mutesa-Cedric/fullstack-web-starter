@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { notifications } from "@mantine/notifications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import useSWR from "swr";
 import axios from "../lib/axios.config";
@@ -8,7 +9,7 @@ import { Product } from "../types";
 import useAuth from "./useAuth";
 
 
-export default async function useProducts() {
+export default function useProducts() {
     const { user } = useAuth();
     const [creatingProduct, setCreatingProduct] = useState(false);
     const [deletingProduct, setDeletingProduct] = useState(false);
@@ -16,7 +17,16 @@ export default async function useProducts() {
     const [, setShowAddOrEdit] = useRecoilState(showAddOrEditProductState);
     const [, setShowDelete] = useRecoilState(showDeleteProductState);
 
-    const { data: products, isLoading, error, mutate } = useSWR<Product[]>("/products", axios.get);
+    const { data: products, isLoading, error, mutate } = useSWR<Product[]>("/products", async (url) => {
+        const { data } = await axios.get(url);
+        return data.products;
+    });
+
+    useEffect(() => {
+        if (user) {
+            mutate();
+        }
+    }, [user])
 
     const createProduct = async (product: Omit<Product, "id" | "createdAt">) => {
         setCreatingProduct(true);

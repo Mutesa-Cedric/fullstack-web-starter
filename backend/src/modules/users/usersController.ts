@@ -32,12 +32,7 @@ export default class UserController {
             // set cookie
             const token = generateToken(newUser.id);
 
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "none",
-                maxAge: 1000 * 60 * 60 * 24 * 7,
-            });
+            res.setHeader("Authorization", `Bearer ${token}`);
             res.status(201).json({
                 success: true,
                 user: newUser,
@@ -74,12 +69,7 @@ export default class UserController {
 
             const token = generateToken(user.id);
 
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "none",
-                maxAge: 1000 * 60 * 60 * 24 * 7,
-            });
+            res.setHeader("Authorization", `Bearer ${token}`);
             res.status(200).json({
                 success: true,
                 user,
@@ -95,7 +85,7 @@ export default class UserController {
 
     public static async logout(req: Request, res: Response) {
         try {
-            res.clearCookie("token");
+            res.setHeader("Authorization", `Bearer `);
             res.status(200).json({
                 success: true,
                 message: "Logout successful"
