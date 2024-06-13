@@ -24,9 +24,7 @@ export default function useProducts() {
     });
 
     useEffect(() => {
-        if (user) {
-            mutate();
-        }
+        mutate();
     }, [user])
 
     const createProduct = async (product: Omit<Product, "id" | "createdAt">) => {

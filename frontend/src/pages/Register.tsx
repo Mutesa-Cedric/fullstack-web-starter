@@ -1,11 +1,9 @@
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useState } from "react";
+import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import AuthInput from "../components/AuthInput";
 import AuthLayout from "../components/layouts/AuthLayout";
-import Logo from "../components/Logo";
-import { Helmet } from "react-helmet";
 import useAuth from "../hooks/useAuth";
 
 export default function Register() {

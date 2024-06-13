@@ -6,6 +6,8 @@ import cookieParser = require("cookie-parser");
 import userRouter from "./modules/users/usersRouter";
 import isAuthenticated from "./middlewares/auth";
 import productsRouter from "./modules/products/productsRouter";
+import swaggerJsdoc = require('swagger-jsdoc');
+import swaggerUi = require('swagger-ui-express');
 
 const PORT = process.env.PORT || 8000;
 
@@ -34,6 +36,36 @@ app.use((req, res, next) => {
     next();
 });
 
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: 'Restful NE Documentation',
+            description: 'Restful API Documentation',
+            contact: {
+                name: 'Mutesa Cedric'
+            },
+            servers: ["http://localhost:8000"]
+        },
+        securityDefinitions: {
+            Bearer: {
+                type: 'apiKey',
+                name: 'Authorization',
+                scheme: 'bearer',
+                in: 'header',
+            },
+        },
+        security: [
+            {
+                Bearer: []
+            }
+        ]
+    },
+    apis: ["./src/modules/users/*.ts", "./src/modules/products/*.ts"]
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/users", userRouter);
 app.use("/products", isAuthenticated, productsRouter);
 app.get("/", (req, res) => {

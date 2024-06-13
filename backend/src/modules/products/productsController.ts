@@ -5,6 +5,37 @@ import { Request, Response } from "express";
 const prismaClient = new PrismaClient();
 
 export default class ProductsController {
+
+    /**
+    * @swagger
+    * /products:
+    *  post:
+    *    description: Create a new product
+    *    parameters:
+    *      - in: body
+    *        name: product
+    *        description: The product to create.
+    *        schema:
+    *          type: object
+    *          required:
+    *            - name
+    *            - description
+    *            - price
+    *          properties:
+    *            name:
+    *              type: string
+    *            description:
+    *              type: string
+    *            price:
+    *              type: number
+    *    responses:
+    *      201:
+    *        description: Product created successfully
+    *      404:
+    *        description: User not found
+    *      500:
+    *        description: Internal Server Error
+    */
     public static async createProduct(req: Request, res: Response) {
         try {
             const product = validateProduct(req.body);
@@ -40,6 +71,19 @@ export default class ProductsController {
         }
     }
 
+    /**
+  * @swagger
+  * /products:
+  *  get:
+  *    description: Get all products
+  *    responses:
+  *      200:
+  *        description: List of products
+  *      404:
+  *        description: User not found
+  *      500:
+  *        description: Internal Server Error
+  */
     public static async getProducts(req: Request, res: Response) {
         try {
             const createdBy = await prismaClient.user.findUnique({
@@ -73,6 +117,44 @@ export default class ProductsController {
         }
     }
 
+    /**
+    * @swagger
+    * /products/{id}:
+    *  put:
+    *    description: Update a product
+    *    parameters:
+    *      - in: path
+    *        name: id
+    *        schema:
+    *          type: string
+    *        required: true
+    *        description: ID of the product to update
+    *      - in: body
+    *        name: product
+    *        description: The product data to update.
+    *        schema:
+    *          type: object
+    *          required:
+    *            - name
+    *            - description
+    *            - price
+    *          properties:
+    *            name:
+    *              type: string
+    *            description:
+    *              type: string
+    *            price:
+    *              type: number
+    *    responses:
+    *      200:
+    *        description: Product updated successfully
+    *      403:
+    *        description: Forbidden
+    *      404:
+    *        description: Product not found
+    *      500:
+    *        description: Internal Server Error
+    */
     public static async updateProduct(req: Request, res: Response) {
         try {
             const productId = req.params.id;
@@ -113,6 +195,26 @@ export default class ProductsController {
         }
     }
 
+    /**
+  * @swagger
+  * /products/{id}:
+  *  delete:
+  *    description: Delete a product
+  *    parameters:
+  *      - in: path
+  *        name: id
+  *        schema:
+  *          type: string
+  *        required: true
+  *        description: ID of the product to delete
+  *    responses:
+  *      200:
+  *        description: Product deleted successfully
+  *      404:
+  *        description: Product not found
+  *      500:
+  *        description: Internal Server Error
+  */
     public static async deleteProduct(req: Request, res: Response) {
         try {
             const productId = req.params.id;

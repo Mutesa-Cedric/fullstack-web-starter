@@ -8,6 +8,37 @@ const prisma = new PrismaClient();
 
 
 export default class UserController {
+
+    /**
+     * @swagger
+     * /users:
+     *  post:
+     *    description: Create a new user
+     *    parameters:
+     *      - in: body
+     *        name: user
+     *        description: The user to create.
+     *        schema:
+     *          type: object
+     *          required:
+     *            - name
+     *            - email
+     *            - password
+     *          properties:
+     *            name:
+     *              type: string
+     *            email:
+     *              type: string
+     *            password:
+     *              type: string
+     *    responses:
+     *      201:
+     *        description: User created successfully
+     *      400:
+     *        description: User already exists
+     *      500:
+     *        description: Internal Server Error
+     */
     public static async createUser(req: Request, res: Response) {
         try {
             const user = validateUser(req.body);
@@ -46,6 +77,34 @@ export default class UserController {
         }
     }
 
+
+    /**
+    * @swagger
+    * /users/login:
+    *  post:
+    *    description: Login a user
+    *    parameters:
+    *      - in: body
+    *        name: user
+    *        description: The user to login.
+    *        schema:
+    *          type: object
+    *          required:
+    *            - email
+    *            - password
+    *          properties:
+    *            email:
+    *              type: string
+    *            password:
+    *              type: string
+    *    responses:
+    *      200:
+    *        description: Login successful
+    *      400:
+    *        description: Invalid email or password
+    *      500:
+    *        description: Internal Server Error
+    */
     public static async login(req: Request, res: Response) {
         try {
             const { email, password } = req.body;
@@ -83,6 +142,17 @@ export default class UserController {
         }
     }
 
+    /**
+     * @swagger
+     * /users/logout:
+     *  get:
+     *    description: Logout a user
+     *    responses:
+     *      200:
+     *        description: Logout successful
+     *      500:
+     *        description: Internal Server Error
+     */
     public static async logout(req: Request, res: Response) {
         try {
             res.setHeader("Authorization", `Bearer `);
@@ -98,6 +168,17 @@ export default class UserController {
         }
     }
 
+        /**
+     * @swagger
+     * /users/me:
+     *  get:
+     *    description: Get currently logged in user
+     *    responses:
+     *      200:
+     *        description: User details
+     *      500:
+     *        description: Internal Server Error
+     */
     public static async getUser(req: Request, res: Response) {
         try {
             const user = await prisma.user.findUnique({
