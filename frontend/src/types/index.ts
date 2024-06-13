@@ -5,3 +5,9 @@ export interface Product {
     price: number;
     createdAt: string;
 }
+
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+}
