@@ -5,25 +5,29 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthInput from "../components/AuthInput";
 import AuthLayout from "../components/layouts/AuthLayout";
 import Logo from "../components/Logo";
-// @ts-expect-error(no type definitions found )
 import { Helmet } from "react-helmet";
+import useAuth from "../hooks/useAuth";
 
 export default function Register() {
-    const [registering, setRegistering] = useState(false);
+    const { register, registering } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setRegistering(true);
-        setTimeout(() => {
-            setRegistering(false);
+        const form = e.currentTarget as HTMLFormElement;
+        const name = form.fullName.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        const repeatPassword = form.repeatPassword.value;
+        if (password !== repeatPassword) {
             notifications.show({
-                title: 'Account creation successful',
-                message: 'You have successfully created your account',
-                color: 'teal',
-            })
-            navigate("/dashboard")
-        }, 2000);
+                title: "Error",
+                message: "Passwords do not match",
+                color: "red",
+            });
+            return;
+        }
+        register(name, email, password);
     }
 
     return (
@@ -34,9 +38,6 @@ export default function Register() {
             <AuthLayout>
                 <div className="mx-auto w-full max-w-sm lg:w-96">
                     <div>
-                        <Link to={'/'}>
-                            <Logo />
-                        </Link>
                         <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
                             Sign in to your account
                         </h2>
@@ -57,6 +58,8 @@ export default function Register() {
                                     label="Full Name"
                                     required
                                     type="text"
+                                    name="fullName"
+                                    min={2} max={50}
                                 />
 
                                 <AuthInput
@@ -64,6 +67,7 @@ export default function Register() {
                                     required
                                     autoComplete="email"
                                     type="email"
+                                    name="email"
                                 />
 
                                 <AuthInput
@@ -71,12 +75,16 @@ export default function Register() {
                                     required
                                     autoComplete="current-password"
                                     type="password"
+                                    name="password"
+                                    min={4} max={50}
                                 />
                                 <AuthInput
                                     label="Repeat Password"
                                     required
                                     autoComplete="current-password"
                                     type="password"
+                                    name="repeatPassword"
+                                    min={4} max={50}
                                 />
 
                                 <div>

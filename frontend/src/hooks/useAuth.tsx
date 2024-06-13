@@ -4,21 +4,18 @@ import { notifications } from "@mantine/notifications";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../lib/axios.config";
+import { deleteCookie, setCookie } from "../lib/utils";
 import { User } from "../types";
 
 interface AuthContextType {
     user: User | null;
     login: (email: string, password: string) => void;
-    logginIn: boolean;
+    loggingIn: boolean;
     register: (name: string, email: string, password: string) => void;
     registering: boolean;
     logout: () => void;
     loggingOut: boolean;
-    resetPassword: (oldPassword: string, newPassword: string) => void;
-    resettingPassword: boolean;
-    updateProfile: (name: string, email: string) => void;
     initialLoading: boolean;
-    updatingProfile: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -65,6 +62,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 password,
             });
             setUser(data.user);
+            setCookie("token", data.token, 7);
             notifications.show({
                 title: "Success",
                 message: "Logged in successfully",
@@ -96,6 +94,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 color: "green",
             });
             setUser(data.user);
+            setCookie("token", data.token, 7);
             navigate("/dashboard");
         } catch (error) {
             notifications.show({
@@ -112,7 +111,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const logout = async () => {
         setLoggingOut(true);
         try {
-            await axios.post("/users/logout");
+            deleteCookie("token");
             setUser(null);
             notifications.show({
                 title: "Success",
@@ -130,56 +129,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setLoggingOut(false);
         }
     };
-
-    const resetPassword = async (oldPassword: string, newPassword: string) => {
-        setResettingPassword(true);
-        try {
-            await axios.post("/users/reset-password", {
-                oldPassword,
-                newPassword,
-            });
-            notifications.show({
-                title: "Success",
-                message: "Password reset successfully",
-                color: "green",
-            });
-        } catch (error) {
-            notifications.show({
-                title: "Error",
-                message: "Invalid old password",
-                color: "red",
-            });
-        } finally {
-            setResettingPassword(false);
-        }
-    };
-
-    const updateProfile = async (name: string, email: string) => {
-        setUpdatingProfile(true);
-        try {
-            const { data } = await axios.post("/auth/update-profile", {
-                name,
-                email,
-            });
-            setUser(data.user);
-            notifications.show({
-                title: "Success",
-                message: "Profile updated successfully",
-                color: "green",
-            });
-        } catch (error) {
-            notifications.show({
-                title: "Error",
-                message: "An error occurred",
-                color: "red",
-            });
-        } finally {
-            setUpdatingProfile(false);
-        }
-    };
-
     return (
-        <AuthContext.Provider value={{ user, login, logginIn: loggingIn, register, registering, logout, loggingOut, resetPassword, resettingPassword, updateProfile, updatingProfile, initialLoading }}>
+        <AuthContext.Provider value={{ user, login, loggingIn, register, registering, logout, loggingOut, initialLoading }}>
             {children}
         </AuthContext.Provider>
     );
