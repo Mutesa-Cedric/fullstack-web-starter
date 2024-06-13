@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express"
 import { verifyToken } from "../utils/jwt";
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.token;
+    const authorization = req.headers.authorization;
+    const token = authorization?.split(" ")[1];
 
     // check if token is valid
     if (!token) {

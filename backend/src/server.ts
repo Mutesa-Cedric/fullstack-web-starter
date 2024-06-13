@@ -28,14 +28,14 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/users", userRouter);
-app.use("/products", isAuthenticated, productsRouter);
+
 app.use((req, res, next) => {
     console.log(req.originalUrl, "\t", req.method, "\t", req.url);
     next();
 });
 
-
+app.use("/users", userRouter);
+app.use("/products", isAuthenticated, productsRouter);
 app.get("/", (req, res) => {
     res.send("Hello world");
 });

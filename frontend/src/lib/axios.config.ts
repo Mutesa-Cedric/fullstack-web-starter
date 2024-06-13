@@ -1,11 +1,13 @@
-import _ from "axios";
+import axios from "axios";
 import { getCookie } from "./utils";
 
-const axios = _.create({
+const token = getCookie("token");
+
+const axiosInstance = axios.create({
     baseURL: "http://localhost:8000",
     headers: {
-        Cookie: `token=${getCookie("token")}`,
+        Authorization: `Bearer ${token}`,
     },
 });
 
-export default axios;
+export default axiosInstance;

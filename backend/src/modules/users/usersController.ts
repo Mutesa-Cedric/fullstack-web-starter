@@ -40,7 +40,7 @@ export default class UserController {
             });
             res.status(201).json({
                 success: true,
-                newUser,
+                user: newUser,
                 token
             })
         } catch (error) {
@@ -84,6 +84,46 @@ export default class UserController {
                 success: true,
                 user,
                 token
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                message: "Internal Server Error"
+            })
+        }
+    }
+
+    public static async logout(req: Request, res: Response) {
+        try {
+            res.clearCookie("token");
+            res.status(200).json({
+                success: true,
+                message: "Logout successful"
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                message: "Internal Server Error"
+            })
+        }
+    }
+
+    public static async getUser(req: Request, res: Response) {
+        try {
+            const user = await prisma.user.findUnique({
+                where: {
+                    // @ts-ignore
+                    id: req.user
+                },
+                select: {
+                    id: true,
+                    email: true,
+                    name: true
+                }
+            });
+            res.status(200).json({
+                success: true,
+                user
             })
         } catch (error) {
             console.log(error);
