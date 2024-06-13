@@ -38,6 +38,9 @@ export default function Register() {
             <AuthLayout>
                 <div className="mx-auto w-full max-w-sm lg:w-96">
                     <div>
+                        <Link to={'/'}>
+                            <p className="font-semibold text-xl text-gray-600 italic">App Name</p>
+                        </Link>
                         <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
                             Sign in to your account
                         </h2>

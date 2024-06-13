@@ -18,6 +18,7 @@ export default function useProducts() {
     const [, setShowDelete] = useRecoilState(showDeleteProductState);
 
     const { data: products, isLoading, error, mutate } = useSWR<Product[]>("/products", async (url) => {
+        if (!user) return;
         const { data } = await axios.get(url);
         return data.products;
     });

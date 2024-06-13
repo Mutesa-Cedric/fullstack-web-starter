@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import useProducts from "../../hooks/useProducts";
 export default function Overview() {
+    const { products } = useProducts();
+
     return (
         <>
             <Helmet>
@@ -12,7 +15,7 @@ export default function Overview() {
                     <p className="text-gray-500">Hello there! here is a summary for you</p>
                 </div>
                 <div className="w-full grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    <StatsCard title="Products" value="200" link="/dashboard/products" />
+                    <StatsCard title="Products" value={products?.length ?? 0} link="/dashboard/products" />
                 </div>
             </div>
         </>

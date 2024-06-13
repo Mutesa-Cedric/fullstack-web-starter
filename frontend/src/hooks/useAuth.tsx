@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setLoggingOut(true);
         try {
             deleteCookie("token");
-            await axios.post("/users/logout");
+            await axios.get("/users/logout");
             setUser(null);
             notifications.show({
                 title: "Success",
