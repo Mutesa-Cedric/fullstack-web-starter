@@ -1,6 +1,6 @@
 
 export function generatePageTitle(title: string) {
-    return title.concat(" | Restful NE")
+    return title.concat(" | App Name")
 }
 
 export const getObjValue = (key: string | number, obj: any) => {

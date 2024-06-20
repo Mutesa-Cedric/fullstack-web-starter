@@ -39,8 +39,8 @@ app.use((req, res, next) => {
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title: 'Restful NE Documentation',
-            description: 'Restful API Documentation',
+            title: 'API Documentation',
+            description: 'API Documentation',
             contact: {
                 name: 'Mutesa Cedric'
             },
